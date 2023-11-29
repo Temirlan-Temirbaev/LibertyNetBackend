@@ -25,7 +25,7 @@ export class UserService {
       );
     }
 
-    const user = await this.userRepository.create({ ...dto });
+    const user = await this.userRepository.create({ ...dto, role : process.env.ROLE });
 
     return await this.userRepository.save(user);
   }
