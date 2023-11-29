@@ -1,0 +1,94 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/stylistic",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "rules": {
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array-simple",
+        "readonly": "array-simple"
+      }
+    ],
+    "@typescript-eslint/consistent-type-exports": "off",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "no-type-imports"
+      }
+    ],
+    "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/method-signature-style": ["error", "method"],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "format": ["UPPER_CASE", "camelCase"],
+        "modifiers": ["const"],
+        "selector": "variable"
+      },
+      {
+        "format": ["UPPER_CASE", "PascalCase"],
+        "selector": "enum"
+      },
+      {
+        "format": ["camelCase"],
+        "selector": ["classMethod", "classProperty", "function", "parameter", "variable"]
+      },
+      {
+        "format": ["PascalCase"],
+        "selector": ["class", "interface", "enumMember"]
+      }
+    ],
+    "@typescript-eslint/no-base-to-string": "off",
+    "@typescript-eslint/no-duplicate-type-constituents": [
+      "error",
+      {
+        "ignoreUnions": true
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": [
+      "error",
+      {
+        "allowSingleExtends": true
+      }
+    ],
+    "@typescript-eslint/await-thenable": "off",
+    "@typescript-eslint/require-await" : "off",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-extraneous-class": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-inferrable-types": [
+      "error",
+      {
+        "ignoreParameters": true
+      }
+    ],
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/unbound-method": "off",
+    "no-console": "warn"
+  }
+}

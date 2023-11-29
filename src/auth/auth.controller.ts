@@ -1,24 +1,24 @@
-import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
+import { Body, Controller, Get, Post, Headers } from "@nestjs/common"
+import { AuthService } from "./auth.service"
+import { CreateUserDto } from "../user/dto/create-user.dto"
+import { LoginDto } from "./dto/login.dto"
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post("register")
   register(@Body() user: CreateUserDto) {
-    return this.authService.register(user);
+    return this.authService.register(user)
   }
 
-  @Post('login')
+  @Post("login")
   login(@Body() user: LoginDto) {
-    return this.authService.login(user);
+    return this.authService.login(user)
   }
 
-  @Get('check-login')
-  checkLogin(@Headers('Authorization') authorization: string) {
-    return this.authService.getUserByJwt(authorization);
+  @Get("check-login")
+  checkLogin(@Headers("Authorization") authorization: string) {
+    return this.authService.getUserByJwt(authorization)
   }
 }
