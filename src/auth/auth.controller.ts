@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Headers } from "@nestjs/common"
+import { Body, Controller, Get, Post, Headers, UseGuards } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { CreateUserDto } from "../user/dto/create-user.dto"
 import { LoginDto } from "./dto/login.dto"
+import {JwtAuthGuard} from "./guards/jwt-auth.guard";
+import {RoleGuard} from "./guards/role.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -18,6 +20,7 @@ export class AuthController {
   }
 
   @Get("check-login")
+  @UseGuards(JwtAuthGuard, RoleGuard)
   checkLogin(@Headers("Authorization") authorization: string) {
     return this.authService.getUserByJwt(authorization)
   }
