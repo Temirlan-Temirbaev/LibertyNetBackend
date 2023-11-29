@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {Injectable, CanActivate, ExecutionContext, UnauthorizedException} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
@@ -13,7 +13,7 @@ export class JwtAuthGuard implements CanActivate {
         const token = this.extractTokenFromHeaders(request.headers);
 
         if (!token) {
-            return false;
+            throw new UnauthorizedException("You are not authorized");
         }
 
         try {
@@ -21,7 +21,7 @@ export class JwtAuthGuard implements CanActivate {
             request.user = user;
             return true;
         } catch (error) {
-            return false;
+            throw new Error(error)
         }
     }
 
