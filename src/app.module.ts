@@ -10,6 +10,7 @@ import { Conversation } from './entities/conversation';
 import { Message } from './entities/message';
 import { ModeratorModule } from './moderator/moderator.module';
 import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PostModule } from './post/post.module';
     UserModule,
     ModeratorModule,
     PostModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
