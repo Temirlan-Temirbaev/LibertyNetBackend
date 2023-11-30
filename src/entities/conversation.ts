@@ -13,7 +13,7 @@ export class Conversation {
   @PrimaryGeneratedColumn()
   id: number;
   @OneToMany(() => User, (user) => user)
-  users: User;
+  users: User[];
   @OneToMany(() => Message, (message) => message.conversationId)
   messages: Message[];
 }
