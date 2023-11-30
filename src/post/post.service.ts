@@ -11,12 +11,21 @@ export class PostService {
   constructor(@InjectRepository(Post) private postRepository: Repository<Post>) {}
 
   async getPostsByAuthor(address: string) {
-    const posts = await this.postRepository.findBy({ author: { address } })
-    return posts
+    const posts = await this.postRepository.find({
+      where: { author: { address } },
+      relations: ["author", "comments"],
+    })
+    return posts.map(post => ({
+      ...post,
+      comments: [post.comments[post.comments.length - 1]],
+    }))
   }
 
   async getPostById(id: number) {
-    const post = await this.postRepository.findOneBy({ id })
+    const post = await this.postRepository.findOne({
+      where: { id },
+      relations: ["author", "comments"],
+    })
     if (!post) {
       throw new HttpException("Post not found", HttpStatus.NOT_FOUND)
     }
@@ -25,23 +34,31 @@ export class PostService {
 
   async getPostsByContent(content: string) {
     const posts = await this.postRepository.find({
-      where: { content: Like(`%${content}%`) }, // Assuming 'content' is the name of the column in your Post entity
+      where: { content: Like(`%${content}%`) }, // Assuming 'content' is the name of the column in your Post entity,
+      relations: ["author", "comments"],
     })
 
-    return posts
+    return posts.map(post => ({
+      ...post,
+      comments: [post.comments[post.comments.length - 1]],
+    }))
   }
 
   async getRecentPosts(page: number) {
-    return await this.postRepository.find({
+    const posts = await this.postRepository.find({
       skip: (page - 1) * 9,
       order: { id: "DESC" },
       take: 9,
+      relations: ["author", "comments"],
     })
+    return posts.map(post => ({
+      ...post,
+      comments: [post.comments[post.comments.length - 1]],
+    }))
   }
 
   async createPost(dto: CreatePostDto, user: User) {
     const post = await this.postRepository.create({ ...dto, author: user })
-    console.log(post)
     return await this.postRepository.save(post)
   }
 
