@@ -9,6 +9,7 @@ import { Comment } from './entities/comment';
 import { Conversation } from './entities/conversation';
 import { Message } from './entities/message';
 import { ModeratorModule } from './moderator/moderator.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ModeratorModule } from './moderator/moderator.module';
     AuthModule,
     UserModule,
     ModeratorModule,
+    PostModule,
   ],
 })
 export class AppModule {}
