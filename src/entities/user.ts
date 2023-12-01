@@ -1,22 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Post } from './post';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Post } from "./post"
+import { ApiProperty } from "@nestjs/swagger"
 
 @Entity()
 export class User {
+  @ApiProperty({ example: "1", description: "unique id" })
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
+  @ApiProperty({ example: "0x557612fAbFe26F97bD7f6b6C0c11C21413A7366E", description: "address of wallet" })
   @Column({ unique: true })
-  address: string;
+  address: string
+  @ApiProperty({ example: "foofie213" })
   @Column({ unique: true })
-  nickname: string;
+  nickname: string
+  @ApiProperty({ example: "avatar.com" })
   @Column({ unique: false })
-  avatar: string;
+  avatar: string
   @Column()
-  password: string;
+  @ApiProperty({ example: "test12345" })
+  password: string
+  @ApiProperty({ example: true })
   @Column({ default: false })
-  isBanned: boolean;
-  @Column({ default: 'user' })
-  role: string;
-  @OneToMany(() => Post, (post) => post.author)
-  posts: Post[];
+  isBanned: boolean
+  @ApiProperty({ example: "admin" })
+  @Column({ default: "user" })
+  role: string
+  @ApiProperty({ type: () => [Post] })
+  @OneToMany(() => Post, post => post.author)
+  posts: Post[]
 }
