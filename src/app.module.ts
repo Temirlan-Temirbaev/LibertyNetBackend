@@ -9,8 +9,8 @@ import { Comment } from './entities/comment';
 import { Conversation } from './entities/conversation';
 import { Message } from './entities/message';
 import { ModeratorModule } from './moderator/moderator.module';
-import {ConversationModule} from "./messenger/conversation.module";
-import {MessageModule} from "./messenger/message.module";
+import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -24,8 +24,8 @@ import {MessageModule} from "./messenger/message.module";
     AuthModule,
     UserModule,
     ModeratorModule,
-    ConversationModule,
-    MessageModule
+    PostModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
