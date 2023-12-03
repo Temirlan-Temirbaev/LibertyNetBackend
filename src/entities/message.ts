@@ -15,5 +15,5 @@ export class Message {
   content: string
   @ApiProperty({ example: "1" })
   @ManyToOne(() => Conversation, conversation => conversation.messages)
-  conversationId: Conversation
+  conversationId: number
 }

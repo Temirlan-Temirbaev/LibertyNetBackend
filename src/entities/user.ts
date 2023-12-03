@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable } from "typeorm"
 import { Post } from "./post"
 import { ApiProperty } from "@nestjs/swagger"
+import { Conversation } from "./conversation"
 
 @Entity()
 export class User {
@@ -28,4 +29,10 @@ export class User {
   @ApiProperty({ type: () => [Post] })
   @OneToMany(() => Post, post => post.author)
   posts: Post[]
+  @ApiProperty({ type: () => [Conversation] })
+  @ManyToMany(() => Conversation, conversation => conversation.users, {
+    cascade: true,
+  })
+  @JoinTable()
+  conversations: Conversation[]
 }
