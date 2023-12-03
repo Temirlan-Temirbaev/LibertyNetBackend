@@ -29,7 +29,7 @@ export class User {
   @ApiProperty({ type: () => [Post] })
   @OneToMany(() => Post, post => post.author)
   posts: Post[]
-  @ApiProperty({ type: () => [Conversation] })
+  @ApiProperty({ type: () => [Conversation], example: [Conversation] })
   @ManyToMany(() => Conversation, conversation => conversation.users, {
     cascade: true,
   })
