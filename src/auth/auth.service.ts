@@ -16,6 +16,8 @@ export class AuthService {
       ...dto,
       password: hashedPassword,
     })
+
+    delete user.password
     return this.jwtService.sign({ ...user })
   }
 
@@ -31,6 +33,8 @@ export class AuthService {
     if (!isValidPassword) {
       throw new HttpException("Not valid password", HttpStatus.BAD_REQUEST)
     }
+
+    delete candidate.password
 
     return this.jwtService.sign({ ...candidate })
   }
