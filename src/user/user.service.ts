@@ -30,4 +30,8 @@ export class UserService {
       where: { address },
     })
   }
+
+  async saveUser(user: User) {
+    return await this.userRepository.save(user)
+  }
 }

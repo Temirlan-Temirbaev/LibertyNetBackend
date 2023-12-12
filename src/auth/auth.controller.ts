@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Headers, UseGuards } from "@nestjs/common"
+import { Body, Controller, Get, Post, Headers, UseGuards, Put, Req } from "@nestjs/common"
 import { AuthService } from "./auth.service"
 import { CreateUserDto } from "../user/dto/create-user.dto"
 import { LoginDto } from "./dto/login.dto"
@@ -23,6 +23,14 @@ export class AuthController {
   @Post("login")
   login(@Body() user: LoginDto) {
     return this.authService.login(user)
+  }
+
+  @ApiOperation({ summary: "Edit Profile" })
+  @ApiResponse({ status: 200, type: String })
+  @UseGuards(JwtAuthGuard)
+  @Put("profile")
+  edit(@Body() user: Partial<CreateUserDto>, @Req() req: { user: User }) {
+    return this.authService.edit(user, req.user)
   }
 
   @ApiOperation({ summary: "Get user data by token" })

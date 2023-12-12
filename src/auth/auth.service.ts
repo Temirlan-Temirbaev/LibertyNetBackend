@@ -4,6 +4,7 @@ import { UserService } from "../user/user.service"
 import { CreateUserDto } from "../user/dto/create-user.dto"
 import { JwtService } from "@nestjs/jwt"
 import { LoginDto } from "./dto/login.dto"
+import { User } from "../entities/user"
 
 @Injectable()
 export class AuthService {
@@ -37,6 +38,15 @@ export class AuthService {
     delete candidate.password
 
     return this.jwtService.sign({ ...candidate })
+  }
+
+  async edit(dto: Partial<CreateUserDto>, user: User) {
+    const dbUser = await this.userService.getUserByAddress(user.address)
+    if (!dbUser) {
+      throw new UnauthorizedException("User not found")
+    }
+    Object.assign(dbUser, dto)
+    return await this.userService.saveUser(dbUser)
   }
 
   async getUserByJwt(token: string) {
