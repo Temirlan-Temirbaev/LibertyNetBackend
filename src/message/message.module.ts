@@ -6,10 +6,11 @@ import { MessageController } from "./message.controller"
 import { MessageService } from "./message.service"
 import { Message } from "../entities/message"
 import { ConversationModule } from "../conversation/conversation.module"
+import { SocketGateway } from "../sockets/websocket.gateway"
 
 @Module({
   imports: [AuthModule, ConversationModule, TypeOrmModule.forFeature([User, Message])],
   controllers: [MessageController],
-  providers: [MessageService],
+  providers: [MessageService, SocketGateway],
 })
 export class MessageModule {}

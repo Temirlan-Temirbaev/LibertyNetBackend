@@ -64,6 +64,12 @@ export class AuthService {
       })
     }
 
-    return user
+    const dbUser = await this.userService.getUserByAddress(user.address)
+
+    if (!dbUser) {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND)
+    }
+
+    return dbUser
   }
 }
