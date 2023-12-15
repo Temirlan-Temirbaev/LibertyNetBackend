@@ -26,9 +26,11 @@ export class UserService {
   }
 
   async getUserByAddress(address: string) {
-    return await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { address },
     })
+    delete user.password
+    return user
   }
 
   async saveUser(user: User) {
