@@ -29,7 +29,6 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: { address },
     })
-    delete user.password
     return user
   }
 
