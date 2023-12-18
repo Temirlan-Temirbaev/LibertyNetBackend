@@ -24,13 +24,10 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     const candidate = await this.userService.getUserByAddress(dto.address)
-
     if (!candidate) {
       throw new UnauthorizedException("User not found")
     }
-
     const isValidPassword = await bcrypt.compare(dto.password, candidate.password)
-
     if (!isValidPassword) {
       throw new HttpException("Not valid password", HttpStatus.BAD_REQUEST)
     }
@@ -71,5 +68,13 @@ export class AuthService {
     }
 
     return dbUser
+  }
+
+  async getUserByAddress(address: string) {
+    const user = await this.userService.getUserByAddress(address)
+    if (!user) {
+      throw new HttpException("User not found", HttpStatus.NOT_FOUND)
+    }
+    return user
   }
 }
