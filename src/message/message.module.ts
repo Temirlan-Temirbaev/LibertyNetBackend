@@ -12,5 +12,6 @@ import { SocketGateway } from "../sockets/websocket.gateway"
   imports: [AuthModule, ConversationModule, TypeOrmModule.forFeature([User, Message])],
   controllers: [MessageController],
   providers: [MessageService, SocketGateway],
+  exports: [SocketGateway],
 })
 export class MessageModule {}

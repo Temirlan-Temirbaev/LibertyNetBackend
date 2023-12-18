@@ -27,15 +27,15 @@ export class MessageService {
       conversationId: conversation.id,
     })
 
-    const savedMessage = await this.messageRepository.save(message)
+    const savedMessage = await this.messageRepository.save(message);
 
     conversation.users.forEach(participant => {
       if (participant.id.toString() !== user.id.toString()) {
-        this.socketGateway.handleMessage(message)
+        this.server.emit("message", savedMessage);
       }
-    })
+    });
 
-    return savedMessage
+    return savedMessage;
   }
 
   private encrypt(text: string): string {
