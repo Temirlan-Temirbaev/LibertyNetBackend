@@ -6,7 +6,7 @@ import { User } from "../entities/user"
 import { CreateMessageDto } from "./dto/create-message.dto"
 import { ConversationService } from "../conversation/conversation.service"
 import * as aes256 from "aes256"
-import { SocketGateway } from "../sockets/websocket.gateway"
+import { io } from "socket.io-client"
 
 @Injectable()
 export class MessageService {
@@ -14,7 +14,6 @@ export class MessageService {
     @InjectRepository(Message)
     private messageRepository: Repository<Message>,
     private conversationService: ConversationService,
-    private socketGateway: SocketGateway,
   ) {}
 
   async createMessage(dto: CreateMessageDto, user: User) {
@@ -29,10 +28,16 @@ export class MessageService {
 
     const savedMessage = await this.messageRepository.save(message)
 
-    conversation.users.forEach(participant => {
-      if (participant.id.toString() !== user.id.toString()) {
-        this.socketGateway.handleMessage(message)
-      }
+    const socket = io("ws://localhost:3000", {
+      query: {
+        conversationId: conversation.id,
+      },
+      transports: ["websocket"],
+    })
+
+    socket.emit("message", {
+      ...message,
+      content: aes256.decrypt("liberty-net-message", message.content),
     })
 
     return savedMessage
