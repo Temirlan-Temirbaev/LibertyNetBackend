@@ -7,13 +7,7 @@ import { WsAdapter } from "./ws.adapter"
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
-  app.enableCors({
-    origin: "http://localhost:3000", // Allow requests from this origin
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Allow these HTTP methods
-    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
-    optionsSuccessStatus: 204, // Set the preflight response status to 204
-    allowedHeaders: "Content-Type, Authorization", // Allow these headers
-  })
+  app.enableCors()
   const config = new DocumentBuilder().setTitle("LibertyNetBackend").setVersion("1.0").addBearerAuth().build()
 
   const document = SwaggerModule.createDocument(app, config)
