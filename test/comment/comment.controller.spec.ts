@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from '../../src/comment/comment.controller';
-import {mockCommentServiceProvider} from "comment.service.mock";
-import {CreateCommentDto} from "comment/dto/create-comment.dto";
-import {User} from "entities/user";
-import {EditCommentDto} from "comment/dto/edit-comment.dto";
-import {CommentService} from "comment/comment.service";
-
+import {mockCommentServiceProvider} from "../../mocks/comment.service.mock";
+import {User} from "../../src/entities/user";
+import {EditCommentDto} from "../../src/comment/dto/edit-comment.dto";
+import {CommentService} from "../../src/comment/comment.service";
+import {CreateCommentDto} from "../../src/comment/dto/create-comment.dto";
 
 describe('CommentController', () => {
     let controller: CommentController;
