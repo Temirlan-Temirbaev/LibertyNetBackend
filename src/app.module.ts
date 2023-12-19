@@ -21,6 +21,10 @@ import { MessageModule } from "./message/message.module"
       type: "postgres",
       synchronize: true,
       url: process.env.POSTGRES_URL,
+      ssl: {
+        //@ts-ignore
+        require: true,
+      },
       entities: [User, Post, Comment, Conversation, Message],
     }),
     AuthModule,
