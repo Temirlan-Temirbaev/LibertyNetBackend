@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { Message } from "src/entities/message"
+import { Message } from "../entities/message"
 import { User } from "../entities/user"
 import { CreateMessageDto } from "./dto/create-message.dto"
 import { ConversationService } from "../conversation/conversation.service"
@@ -27,15 +27,15 @@ export class MessageService {
       conversationId: conversation.id,
     })
 
-    const savedMessage = await this.messageRepository.save(message)
+    const savedMessage = await this.messageRepository.save(message);
 
     conversation.users.forEach(participant => {
       if (participant.id.toString() !== user.id.toString()) {
         this.socketGateway.handleMessage(message)
       }
-    })
-
-    return savedMessage
+    });
+  
+    return savedMessage;
   }
 
   private encrypt(text: string): string {
