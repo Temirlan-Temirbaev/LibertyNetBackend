@@ -67,7 +67,6 @@ describe('PostService', () => {
 
             jest.spyOn(userRepository, 'findOneBy').mockResolvedValueOnce(mockUser);
 
-            // Mock the behavior of postRepository.create and postRepository.save
             jest.spyOn(postRepository, 'create').mockReturnValueOnce(mockCreatedPost);
             jest.spyOn(postRepository, 'save').mockImplementationOnce(async (post) => post as Post);
 

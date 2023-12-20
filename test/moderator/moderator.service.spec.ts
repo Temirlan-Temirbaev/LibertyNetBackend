@@ -5,7 +5,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import {ModeratorService} from "../../src/moderator/moderator.service";
 import {User} from "../../src/entities/user";
 
-// Создаем mock-репозиторий
+
 const mockRepository = {
     findOneBy: jest.fn(),
     save: jest.fn(),

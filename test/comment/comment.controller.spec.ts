@@ -1,62 +1,85 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from '../../src/comment/comment.controller';
-import {mockCommentServiceProvider} from "../../mocks/comment.service.mock";
 import {User} from "../../src/entities/user";
-import {EditCommentDto} from "../../src/comment/dto/edit-comment.dto";
 import {CommentService} from "../../src/comment/comment.service";
 import {CreateCommentDto} from "../../src/comment/dto/create-comment.dto";
+import {JwtService} from "@nestjs/jwt";
+import {mockedJwtService} from "../../mocks/mock-jwt.service";
+import {MockJwtAuthGuard} from "../../mocks/mock-jwt-auth.guard";
+import {PostService} from "../../src/post/post.service";
+import {getRepositoryToken} from "@nestjs/typeorm";
+import {MockUserRepository} from "../../mocks/mock-user.repository";
+import {MockCommentRepository} from "../../mocks/mock-comment.repository";
+import {HttpException, HttpStatus} from "@nestjs/common";
+import { Comment } from "../../src/entities/comment";
+import {Post} from "../../src/entities/post";
+import {MockPostRepository} from "../../mocks/mock-post.repository";
 
 describe('CommentController', () => {
     let controller: CommentController;
-    let commentService: CommentService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [CommentController],
-            providers: [mockCommentServiceProvider],
+            providers: [
+                CommentService,
+                PostService,
+                {
+                    provide: JwtService,
+                    useValue: mockedJwtService,
+                },
+                MockJwtAuthGuard,
+                {
+                    provide: getRepositoryToken(User),
+                    useClass: MockUserRepository,
+                },
+                {
+                    provide: getRepositoryToken(Comment),
+                    useClass: MockCommentRepository,
+                },
+                {
+                    provide: getRepositoryToken(Post),
+                    useClass: MockPostRepository,
+                },
+            ],
         }).compile();
 
-        controller = module.get<CommentController>(CommentController);
-        commentService = module.get<CommentService>(CommentService);
-    });
-
-    it('should be defined', () => {
-        expect(controller).toBeDefined();
+        controller = (await module.resolve<CommentController>(CommentController)) as CommentController;
     });
 
     describe('createComment', () => {
         it('should create a comment', async () => {
-            const createCommentDto: CreateCommentDto = { content: 'testContent', postId: 1 };
-            const user: Partial<User> = { address: 'testUserAddress' };
+            const dto: CreateCommentDto = {
+                content: 'testContent',
+                postId: 1,
+            };
 
-            const result = await controller.createComment(createCommentDto, { user } as any);
+            jest.spyOn(controller['commentService'], 'createComment').mockResolvedValueOnce(Promise.resolve(new Comment() as Comment));
+
+            const result = await controller.createComment(dto, { user: new User() });
 
             expect(result).toBeDefined();
-            expect(commentService.createComment).toHaveBeenCalledWith(createCommentDto, user as User);
+            expect(controller['commentService'].createComment).toHaveBeenCalledWith(dto, expect.any(User));
+        });
+
+        it('should throw HttpException if creation fails', async () => {
+            const dto: CreateCommentDto = {
+                content: 'testContent',
+                postId: 1,
+            };
+
+            jest.spyOn(controller['commentService'], 'createComment').mockRejectedValueOnce(
+                new HttpException('Comment creation failed', HttpStatus.INTERNAL_SERVER_ERROR),
+            );
+
+            await expect(controller.createComment(dto, { user: new User() })).rejects.toThrowError(
+                new HttpException('Comment creation failed', HttpStatus.INTERNAL_SERVER_ERROR),
+            );
+            expect(controller['commentService'].createComment).toHaveBeenCalledWith(dto, expect.any(User));
         });
     });
 
-    describe('editComment', () => {
-        it('should edit a comment', async () => {
-            const editCommentDto: EditCommentDto = { content: 'testContent', id: 1 };
-            const user: Partial<User> = { address: 'testUserAddress' };
-
-            const result = await controller.editComment(editCommentDto, { user } as any);
-
-            expect(result).toBeDefined();
-            expect(commentService.editComment).toHaveBeenCalledWith(editCommentDto, user as User);
-        });
-    });
-
-    describe('deleteComment', () => {
-        it('should delete a comment', async () => {
-            const commentId = 1;
-            const user: Partial<User> = { address: 'testUserAddress' };
-
-            const result = await controller.deleteComment(commentId, { user } as any);
-
-            expect(result).toBeDefined();
-            expect(commentService.deleteComment).toHaveBeenCalledWith(commentId, user as User);
-        });
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 });

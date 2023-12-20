@@ -72,7 +72,6 @@ describe('UserService', () => {
 
             jest.spyOn(repository, 'findOneBy').mockResolvedValueOnce(new User());
 
-            // Используем expect.any для уточнения типа ошибки
             await expect(service.createUser(createUserDto)).rejects.toThrowError(
                 expect.any(HttpException)
             );
@@ -88,7 +87,6 @@ describe('UserService', () => {
 
             jest.spyOn(repository, 'findOneBy').mockResolvedValueOnce(null).mockResolvedValueOnce(new User());
 
-            // Используем expect.any для уточнения типа ошибки
             await expect(service.createUser(createUserDto)).rejects.toThrowError(
                 expect.any(HttpException)
             );
