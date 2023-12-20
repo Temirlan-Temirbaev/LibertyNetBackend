@@ -24,7 +24,7 @@ import {MessageModule} from "./message/message.module"
       ssl: {
         // @ts-ignore
         require: true,
-      },
+     },
       entities: [User, Post, Comment, Conversation, Message],
     }),
     AuthModule,
