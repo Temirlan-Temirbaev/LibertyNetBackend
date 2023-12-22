@@ -24,6 +24,10 @@ export class ConversationService {
       if (!user1 || !user2) {
         new NotFoundException("One or more users do not exist.")
       }
+      const conversationCandidate = this.conversationRepository.findOneBy({ users: [user1, user2] })
+
+      if (conversationCandidate) return conversationCandidate
+
       const conversation = this.conversationRepository.create({
         users: [user1, user2],
       })
